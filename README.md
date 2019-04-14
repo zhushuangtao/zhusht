@@ -1,2 +1,2 @@
 # zhusht
-my repository
+hello zhusht
