@@ -1,6 +1,6 @@
 /*
  *  armboot - Startup Code for ARM920 CPU-core
- *
+ *  https://max.book118.com/html/2015/0924/26100737.shtm
  *  Copyright (c) 2001	Marius Gr鰃er <mag@sysgo.de>
  *  Copyright (c) 2002	Alex Z黳ke <azu@sysgo.de>
  *  Copyright (c) 2002	Gary Jennejohn <garyj@denx.de>
@@ -114,8 +114,10 @@ start_code:
 	orr	r0, r0, #0xd3
 	msr	cpsr, r0
 
-	bl	coloured_LED_init
-	bl	red_LED_on
+#if 0       //这两行是AT91RM9200DK开发板的LED初始化，注释掉
+        bl coloured_LED_init
+        bl red_LED_on
+#endif
 
 #if	defined(CONFIG_AT91RM9200DK) || defined(CONFIG_AT91RM9200EK)
 	/*
@@ -132,7 +134,6 @@ copyex:
 #endif
 
 #ifdef CONFIG_S3C24X0
-	/* turn off the watchdog */
 
 # if defined(CONFIG_S3C2400)
 #  define pWTCON	0x15300000
@@ -145,27 +146,84 @@ copyex:
 #  define CLKDIVN	0x4C000014	/* clock divisor register */
 # endif
 
+#  define CLK_CTL_BASE  0x4C000000
+#  define MDIV_405      0x7f<<12
+#  define PSDIV_405     0x21
+#  define MDIV_200      0xa1<<12
+#  define PSDIV_200     0x31
+
+       /* turn off the watchdog */
 	ldr	r0, =pWTCON
 	mov	r1, #0x0
 	str	r1, [r0]
 
-	/*
-	 * mask all IRQs by setting all bits in the INTMR - default
-	 */
-	mov	r1, #0xffffffff
-	ldr	r0, =INTMSK
-	str	r1, [r0]
-# if defined(CONFIG_S3C2410)
-	ldr	r1, =0x3ff
-	ldr	r0, =INTSUBMSK
-	str	r1, [r0]
+        /*
+        * mask all IRQs by setting all bits in the INTMR - default
+        */
+# if 0  /* defined(CONFIG_S3C2410) */
+        mov r1, #0xffffffff
+        ldr r0, =INTMSK
+        str r1, [r0]
+
+        ldr r1, =0x3ff
+        ldr r0, =INTSUBMSK
+        str r1, [r0]
 # endif
 
+#if defined(CONFIG_S3C2440)
+        ldr r1, =0x7fff          //根据2440芯片手册，INTSUBMSK寄存器有15位可用
+        ldr r0, =INTSUBMSK
+        str r1, [r0]
+#endif
+#if defined(CONFIG_S3C2440)      //添加s3c2440的时钟部分
+#  define LOCKTIME 0x4C000000
+#  define MPLLCON 0x4C000004
+#  define UPLLCON 0x4C000008
+#  define CAMDIVN 0x4C000018 
+    
+        /* locktime用来在正常运行时更改时钟的时候保护时钟*/
+        ldr r0,=LOCKTIME
+        mov r1,#0xffffff
+        str r1,[r0]
+
+        /* 清除摄像头分频寄存器值,这个值会影响HCLK */
+        ldr r0,=CAMDIVN
+        mov r1,#0
+        str r1,[r0]
+	
+        ldr r0, =CLKDIVN
+        mov r1, #5              //设置分频系数FCLK:HCLK:PCLK = 1:4:8
+        str r1, [r0]
+
+        mrc p15,0,r1,c1,c0,0
+        orr r1,r1,#0xc0000000
+        mcr p15,0,r1,c1,c0,0
+    #if 1
+        ldr r0, =UPLLCON
+        ldr r1, =0x38022        //设置USB时钟频率为48MHz 
+        str r1, [r0]
+	
+        nop;nop;nop;nop;nop;nop;nop;nop;
+	
+        ldr r0, =MPLLCON
+        ldr r1, =0x5C011        //设置系统主频为405MHz 0x7F021
+        str r1, [r0]
+    #endif
+#else
 	/* FCLK:HCLK:PCLK = 1:2:4 */
 	/* default FCLK is 120 MHz ! */
 	ldr	r0, =CLKDIVN
 	mov	r1, #3
 	str	r1, [r0]
+        mrc    p15, 0, r1, c1, c0, 0    
+        orr    r1, r1, #0xc0000000    
+        mcr    p15, 0, r1, c1, c0, 0    
+
+        mov    r1, #CLK_CTL_BASE    
+        mov    r2, #MDIV_200    
+        add    r2, r2, #PSDIV_200    
+        str    r2, [r1, #0x04]
+#endif
 #endif	/* CONFIG_S3C24X0 */
 
 	/*
@@ -434,3 +492,14 @@ fiq:
 	bl	do_fiq
 
 #endif
+.globl debug_led
+debug_led:
+  ldr r0, =0x56000058
+  ldr r1, =0x0f
+  str r1, [r0]
+  ldr r0, =0x56000050
+  ldr r1, =0x55
+  str r1, [r0]
+  ldr r0, =0x56000054
+  ldr r1, =0x0c   
+  str r1, [r0]

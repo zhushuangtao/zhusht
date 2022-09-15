@@ -78,7 +78,8 @@ struct s3c24x0_interrupt {
 	u32	PRIORITY;
 	u32	INTPND;
 	u32	INTOFFSET;
-#ifdef CONFIG_S3C2410
+//#ifdef CONFIG_S3C2410
+#if defined(CONFIG_S3C2410) ||defined(CONFIG_S3C2440)
 	u32	SUBSRCPND;
 	u32	INTSUBMSK;
 #endif
@@ -88,11 +89,13 @@ struct s3c24x0_interrupt {
 /* DMAS (see manual chapter 8) */
 struct s3c24x0_dma {
 	u32	DISRC;
-#ifdef CONFIG_S3C2410
+//#ifdef CONFIG_S3C2410
+#if defined(CONFIG_S3C2410) ||defined(CONFIG_S3C2440)
 	u32	DISRCC;
 #endif
 	u32	DIDST;
-#ifdef CONFIG_S3C2410
+//#ifdef CONFIG_S3C2410
+#if defined(CONFIG_S3C2410) ||defined(CONFIG_S3C2440)
 	u32	DIDSTC;
 #endif
 	u32	DCON;
@@ -103,7 +106,8 @@ struct s3c24x0_dma {
 #ifdef CONFIG_S3C2400
 	u32	res[1];
 #endif
-#ifdef CONFIG_S3C2410
+//#ifdef CONFIG_S3C2410
+#if defined(CONFIG_S3C2410) ||defined(CONFIG_S3C2440)
 	u32	res[7];
 #endif
 };
@@ -122,6 +126,9 @@ struct s3c24x0_clock_power {
 	u32	CLKCON;
 	u32	CLKSLOW;
 	u32	CLKDIVN;
+#if defined(CONFIG_S3C2440)
+    u32 CAMDIVN;
+#endif
 };
 
 
@@ -141,7 +148,8 @@ struct s3c24x0_lcd {
 	u32	res[8];
 	u32	DITHMODE;
 	u32	TPAL;
-#ifdef CONFIG_S3C2410
+//#ifdef CONFIG_S3C2410
+#if defined(CONFIG_S3C2410) ||defined(CONFIG_S3C2440)
 	u32	LCDINTPND;
 	u32	LCDSRCPND;
 	u32	LCDINTMSK;
@@ -160,7 +168,24 @@ struct s3c2410_nand {
 	u32	NFECC;
 };
 
-
+struct s3c2440_nand {
+    u32    NFCONF;
+    u32    NFCONT;
+    u32    NFCMD;
+    u32    NFADDR;
+    u32    NFDATA;
+    u32    NFMECCD0;
+    u32    NFMECCD1;
+    u32    NFSECCD;
+    u32    NFSTAT;
+    u32    NFESTAT0;
+    u32    NFESTAT1;
+    u32    NFMECC0;
+    u32    NFMECC1;
+    u32    NFSECC;
+    u32    NFSBLK;
+    u32    NFEBLK;
+};
 /* UART (see manual chapter 11) */
 struct s3c24x0_uart {
 	u32	ULCON;
@@ -397,7 +422,8 @@ struct s3c24x0_gpio {
 	u32	MISCCR;
 	u32	EXTINT;
 #endif
-#ifdef CONFIG_S3C2410
+//#ifdef CONFIG_S3C2410
+#if defined(CONFIG_S3C2410) ||defined(CONFIG_S3C2440)
 	u32	GPACON;
 	u32	GPADAT;
 	u32	res1[2];

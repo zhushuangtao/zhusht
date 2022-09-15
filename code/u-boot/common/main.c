@@ -346,6 +346,22 @@ void main_loop (void)
 	install_auto_complete();
 #endif
 
+#ifdef CONFIG_CMD_MTDPARTS
+    if (!getenv("mtdparts"))
+    {
+        run_command("mtdparts default", 0);
+    }
+#endif
+#ifdef CONFIG_CMD_NET
+    char *p = NULL;
+    if ((p = getenv("ipaddr")) != NULL){
+		char cmd[128] = {0};
+		strcpy(cmd, "ping ");
+		strcat(cmd, p);
+        run_command(cmd, 0);
+	}
+#endif
+
 #ifdef CONFIG_PREBOOT
 	if ((p = getenv ("preboot")) != NULL) {
 # ifdef CONFIG_AUTOBOOT_KEYED

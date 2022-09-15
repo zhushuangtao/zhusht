@@ -1,0 +1,136 @@
+https://blog.csdn.net/yichu5074/article/details/78178529
+/*==========================================================*/
+SVN-16(2021-11-08)
+U-Boot 2010.03-svn16 (Nov 08 2021 - 05:19:01)
+
+DRAM:  64 MB
+Flash:  2 MB
+NAND:  256 MiB
+*** Warning - bad CRC, using default environment
+
+In:    serial
+Out:   serial
+Err:   serial
+Net:   dm9000
+dm9000 i/o: 0x20000300, id: 0x90000a46 
+DM9000: running in 16 bit mode
+MAC: 1a:2b:3c:4d:5e:6f
+operating at 100M full duplex mode
+Using dm9000 device
+ping failed; host 172.16.175.8 is not alive
+SMDK2440 # help
+?       - alias for 'help'
+base    - print or set address offset
+bdinfo  - print Board Info structure
+boot    - boot default, i.e., run 'bootcmd'
+bootd   - boot default, i.e., run 'bootcmd'
+bootelf - Boot from an ELF image in memory
+bootm   - boot application image from memory
+bootp   - boot image via network using BOOTP/TFTP protocol
+bootvx  - Boot vxWorks from an ELF image
+chpart  - change active partition
+cmp     - memory compare
+coninfo - print console devices and information
+cp      - memory copy
+crc32   - checksum calculation
+date    - get/set/reset date & time
+dcache  - enable or disable data cache
+echo    - echo args to console
+editenv - edit environment variable
+erase   - erase FLASH memory
+flinfo  - print FLASH memory information
+fsinfo  - print information about filesystems
+fsload  - load binary file from a filesystem image
+go      - start application at address 'addr'
+help    - print command description/usage
+icache  - enable or disable instruction cache
+iminfo  - print header information for application image
+imls    - list all images found in flash
+imxtract- extract a part of a multi-image
+itest   - return true/false on integer compare
+loadb   - load binary file over serial line (kermit mode)
+loads   - load S-Record file over serial line
+loady   - load binary file over serial line (ymodem mode)
+loop    - infinite loop on address range
+ls      - list files in a directory (default /)
+md      - memory display
+mm      - memory modify (auto-incrementing address)
+mtdparts- define flash/nand partitions
+mtest   - simple RAM read/write test
+mw      - memory write (fill)
+nand    - NAND sub-system
+nboot   - boot from NAND device
+nfs     - boot image via network using NFS protocol
+nm      - memory modify (constant address)
+ping    - send ICMP ECHO_REQUEST to network host
+printenv- print environment variables
+protect - enable or disable FLASH write protection
+rarpboot- boot image via network using RARP/TFTP protocol
+reset   - Perform RESET of the CPU
+run     - run commands in an environment variable
+saveenv - save environment variables to persistent storage
+setenv  - set environment variables
+sleep   - delay execution for some time
+source  - run script from memory
+tftpboot- boot image via network using TFTP protocol
+version - print monitor version
+SMDK2440 # finfo
+Unknown command 'finfo' - try 'help'
+SMDK2440 # flinfo
+
+Bank # 1: AMD: 1x Amd29LV160BB (2Mbit)
+  Size: 2 MB in 35 Sectors
+  Sector Start Addresses:
+    00000000 (RO) 00004000 (RO) 00006000 (RO) 00008000 (RO) 00010000 (RO)
+    00020000 (RO) 00030000      00040000      00050000      00060000     
+    00070000      00080000      00090000      000A0000      000B0000     
+    000C0000      000D0000      000E0000      000F0000      00100000     
+    00110000      00120000      00130000      00140000      00150000     
+    00160000      00170000      00180000      00190000      001A0000     
+    001B0000      001C0000      001D0000      001E0000      001F0000     
+SMDK2440 # 
+
+https://blog.csdn.net/yichu5074/article/details/78178529
+/*==========================================================*/
+SVN-15(2021-11-07)
+SMDK2440 # 
+U-Boot 2010.03-svn12 (Nov 07 2021 - 03:35:22)
+
+DRAM:  64 MB
+Flash:  2 MB
+NAND:  256 MiB
+*** Warning - bad CRC, using default environment
+
+In:    serial
+Out:   serial
+Err:   serial
+Net:   dm9000
+SMDK2440 # print
+bootdelay=3
+baudrate=115200
+ethaddr=1a:2b:3c:4d:5e:6f
+ipaddr=172.16.175.8
+serverip=172.16.175.6
+netmask=255.255.255.0
+stdin=serial
+stdout=serial
+stderr=serial
+ethact=dm9000
+
+Environment size: 173/65532 bytes
+SMDK2440 # ping 172.16.175.6
+dm9000 i/o: 0x20000300, id: 0x90000a46 
+DM9000: running in 16 bit mode
+MAC: 1a:2b:3c:4d:5e:6f
+operating at 100M full duplex mode
+Using dm9000 device
+host 172.16.175.6 is alive
+SMDK2440 # ping 172.16.175.6
+dm9000 i/o: 0x20000300, id: 0x90000a46 
+DM9000: running in 16 bit mode
+MAC: 1a:2b:3c:4d:5e:6f
+operating at 100M full duplex mode
+Using dm9000 device
+host 172.16.175.6 is alive
+SMDK2440 # 
+/*============================================================*/

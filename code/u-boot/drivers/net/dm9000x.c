@@ -360,15 +360,17 @@ static int dm9000_init(struct eth_device *dev, bd_t *bd)
 	/* Enable TX/RX interrupt mask */
 	DM9000_iow(DM9000_IMR, IMR_PAR);
 
+    #if 1
 	i = 0;
 	while (!(phy_read(1) & 0x20)) {	/* autonegation complete bit */
 		udelay(1000);
 		i++;
-		if (i == 10000) {
+		if (i == 3000) {
 			printf("could not establish link\n");
 			return 0;
 		}
 	}
+	#endif
 
 	/* see what we've got */
 	lnk = phy_read(17) >> 12;
@@ -442,6 +444,7 @@ static int dm9000_send(struct eth_device *netdev, volatile void *packet,
 */
 static void dm9000_halt(struct eth_device *netdev)
 {
+#if 0
 	DM9000_DBG("%s\n", __func__);
 
 	/* RESET devie */
@@ -449,6 +452,7 @@ static void dm9000_halt(struct eth_device *netdev)
 	DM9000_iow(DM9000_GPR, 0x01);	/* Power-Down PHY */
 	DM9000_iow(DM9000_IMR, 0x80);	/* Disable all interrupt */
 	DM9000_iow(DM9000_RCR, 0x00);	/* Disable RX */
+#endif
 }
 
 /*
@@ -588,7 +592,7 @@ phy_read(int reg)
 	/* Fill the phyxcer register into REG_0C */
 	DM9000_iow(DM9000_EPAR, DM9000_PHY | reg);
 	DM9000_iow(DM9000_EPCR, 0xc);	/* Issue phyxcer read command */
-	udelay(100);			/* Wait read complete */
+	udelay(1000);			/* Wait read complete */
 	DM9000_iow(DM9000_EPCR, 0x0);	/* Clear phyxcer read command */
 	val = (DM9000_ior(DM9000_EPDRH) << 8) | DM9000_ior(DM9000_EPDRL);
 
